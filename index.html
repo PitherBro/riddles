@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Riddles</title>
+  <meta charset="UTF-8">
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid black;
+      padding: 5px;
+    }
+    th {
+      text-align: left;
+    }
+    .answer {
+      display: none;
+    }
+  </style>
+  <style>
+  /* Set the background and text color for the page */
+body {
+  background-color: #1a1a1a;
+  color: #fff;
+}
+
+/* Set the background and text color for the table headers */
+th {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Set the background color for the table rows */
+tr:nth-child(even) {
+  background-color: #333;
+}
+
+/* Set the background color for the table rows in odd columns */
+tr:nth-child(odd) td:nth-child(even),
+tr:nth-child(odd) th:nth-child(even) {
+  background-color: #1a1a1a;
+}
+
+/* Set the background color for the table rows in even columns */
+tr:nth-child(odd) td:nth-child(odd),
+tr:nth-child(odd) th:nth-child(odd) {
+  background-color: #333;
+}
+
+/* Set the color of the button for toggling between dark and light mode */
+.toggle-btn {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Set the color of the button for toggling between dark and light mode in hover state */
+.toggle-btn:hover {
+  background-color: #fff;
+  color: #333;
+}
+
+</style>
+</head>
+<body>
+  <h1>Riddles</h1>
+  <button id="new-button">New Riddle</button>
+  <button id="export-button">Export Riddles</button>
+    <button id="show-button">Show Riddles</button>
+  <label for="import-input"><button>Import Riddles</button></label>
+  
+  <input type="file" id="import-input" style="display: none;">
+  <table id="riddles-table">
+    <thead>
+      <tr>
+        <th>Question</th>
+        <th>Answer</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <div id="form-container" style="display: none;">
+    <h2>New Riddle</h2>
+    <form id="riddle-form">
+      <label for="question-input">Question:</label>
+      <br>
+      <input type="text" id="question-input" name="question">
+      <br><br>
+      <label for="answer-input">Answer:</label>
+      <br>
+      <input type="text" id="answer-input" name="answer">
+      <br><br>
+      <input type="submit" value="Submit">
+      <input type="button" value="Cancel" onclick="closeForm()">
+    </form>
+  </div>
+<script>
+    var riddles = [
+  { question: "What has a heart that doesn't beat?", answer: "Artichoke" },
+  { question: "What has a neck but no head?", answer: "Bottle" },
+  { question: "What has a thumb and four fingers but is not alive?", answer: "Glove" },
+  { question: "What goes through towns and over hills but never moves?", answer: "Road" },
+  { question: "What has a face and two hands but no arms or legs?", answer: "Clock" },
+  { question: "What is always in front of you but can't be seen?", answer: "Future" },
+  { question: "What can you break even if you never pick it up or touch it?", answer: "Promise" },
+  { question: "What has a tail and a head but no body?", answer: "Coin" },
+  { question: "What has a mouth but can't talk, runs but can't walk?", answer: "River" },
+  { question: "What has eyes but can't see, a tongue but can't taste, and a soul but can't live?", answer: "Shoe" },
+  { question: "What has a bottom at the top?", answer: "Legs" },
+  { question: "What is always in bed but never sleeps?", answer: "River" },
+  { question: "What is at the end of a rainbow?", answer: "W" },
+  { question: "What is full of holes but still holds water?", answer: "Sponge" },
+  { question: "What begins with T, ends with T, and has T in it?", answer: "Teapot" },
+  { question: "What has a head and a tail but no body?", answer: "Coin" },
+  { question: "What has a bed but never sleeps, a mouth but never speaks?", answer: "River" },
+  { question: "What is the beginning of eternity, the end of time and space?", answer: "The letter E" },
+  { question: "What is always coming but never arrives?", answer: "Tomorrow" },
+  { question: "What has a heart that doesn't beat?", answer: "Artichoke" },
+  { question: "What has a neck but no head?", answer: "Bottle" },
+  { question: "What has a thumb and four fingers but is not alive?", answer: "Glove" },
+  { question: "What goes through towns and over hills but never moves?", answer: "Road" },
+  { question: "What has a face and two hands but no arms or legs?", answer: "Clock" },
+  { question: "What is always in front of you but can't be seen?", answer: "Future" },
+  { question: "What can you break even if you never pick it up or touch it?", answer: "Promise" },
+  { question: "What has a tail and a head but no body?", answer: "Coin" },
+  { question: "What has a mouth but can't talk, runs but can't walk?", answer: "River" },
+  { question: "What has eyes but can't see, a tongue but can't taste, and a soul but can't live?", answer: "Shoe" },
+  { question: "What has a bottom at the top?", answer: "Legs" },
+  { question: "What is always in bed but never sleeps?", answer: "River" },
+  { question: "What has a head, a tail, is brown, and has no legs?", answer: "Penny" },
+  { question: "I am taken from a mine and shut up in a wooden case, from which I am never released, and yet I am used by almost every person. What am I?", answer: "Pencil lead" },
+  { question: "What is light as a feather, but even the world's strongest man couldn't hold it for more than a minute?", answer: "Breath" },
+  { question: "What is always in front of you but can’t be seen?", answer: "The future" },
+  { question: "What is so fragile that saying its name breaks it?", answer: "Silence" },
+  { question: "I am always hungry, I must always be fed. The finger I touch, will soon turn red. What am I?", answer: "Fire" },
+  { question: "What belongs to you but is used more by others?", answer: "Your name" },
+  { question: "What has many teeth but can't bite?", answer: "Comb" },
+  { question: "What has a mouth but can't eat, what moves but has no feet?", answer: "River" },
+  { question: "What is harder to catch the faster you run?", answer: "Your breath" },
+  { question: "What begins with an E but only contains one letter?", answer: "Envelope" },
+  { question: "What has a head and a tail but no body?", answer: "Coin" },
+  { question: "I am taken from a mine and shut up in a wooden case, from which I am never released, and yet I am used by almost every person. What am I?", answer: "Pencil lead" },
+  { question: "What has a heart that doesn't beat?", answer: "Artichoke" },
+  { question: "What can be cracked, made, told, and played?", answer: "A joke" },
+  { question: "What is so fragile that saying its name breaks it?", answer: "Silence" },
+  { question: "What has a neck but no head?", answer: "Bottle" },
+  { question: "What goes up but never comes down?", answer: "Age" },
+  { question: "What has four legs in the morning, two legs in the afternoon, and three legs in the evening?", answer: "Human" },
+  { question: "I am not alive, but I grow; I don't have lungs, but I need air; I don't have a mouth, but water kills me. What am I?", answer: "Fire" },
+{ question: "The more you take, the more you leave behind. What am I?", answer: "Footsteps" },
+{ question: "I am not alive, but I grow; I don't have wings, but I fly; I don't have eyes, but I see everything. What am I?", answer: "Imagination" },
+{ question: "I am always in front of you, but can't be seen. What am I?", answer: "The future" },
+{ question: "I am an odd number. Take away a letter and I become even. What number am I?", answer: "Seven" },
+{ question: "I am an invention that allows people to see through walls. What am I?", answer: "A window" },
+{ question: "I am taken from a mine and shut up in a wooden case, from which I am never released, and yet I am used by almost every person. What am I?", answer: "Pencil lead" },
+{ question: "I am light as a feather, yet the strongest person cannot hold me for more than five minutes. What am I?", answer: "Breath" },
+{ question: "I am not alive, but I grow; I don't have a mouth, but I need water to live. What am I?", answer: "Plant" },
+{ question: "I am full of holes but still holds water. What am I?", answer: "Sponge" }
+];
+
+    function renderRiddles() {
+      var table = document.getElementById("riddles-table");
+      var tbody = table.getElementsByTagName("tbody")[0];
+      tbody.innerHTML = "";
+      for (var i = 0; i < riddles.length; i++) {
+        var row = tbody.insertRow();
+        var riddleCell = row.insertCell();
+        riddleCell.innerText = riddles[i].question;
+        var answerCell = row.insertCell();
+        var answerSpan = document.createElement("span");
+        answerSpan.innerText = "Click to reveal answer";
+        answerSpan.onclick = function(span, answer) {
+          return function() {
+            span.innerText = answer;
+          };
+        }(answerSpan, riddles[i].answer);
+        answerCell.appendChild(answerSpan);
+      }
+    }
+
+    function addRiddle(question, answer) {
+      riddles.push({question: question, answer: answer});
+      renderRiddles();
+    }
+
+    function openForm() {
+      document.getElementById("form-container").style.display = "block";
+    }
+
+    function closeForm() {
+      document.getElementById("form-container").style.display = "none";
+    }
+
+    function submitForm(event) {
+      event.preventDefault();
+      var form = document.getElementById("riddle-form");
+      var question = form.elements["question"].value;
+      var answer = form.elements["answer"].value;
+      addRiddle(question, answer);
+      form.reset();
+      closeForm();
+    }
+
+    function downloadRiddles() {
+      var table = document.getElementById("riddles-table");
+      var tbody = table.getElementsByTagName("tbody")[0];
+      var riddles = [];
+      for (var i = 0; i < tbody.rows.length; i++) {
+        var row = tbody.rows[i];
+        var question = row.cells[0].textContent;
+        var answer = row.cells[1].textContent;
+        riddles.push({question: question, answer: answer});
+      }
+      var data = JSON.stringify(riddles);
+      var file = new Blob([data], {type: "application/json"});
+      var link = document.createElement("a");
+      link.href = URL.createObjectURL(file);
+      link.download = "riddles.json";
+      link.click();
+    }
+
+    document.getElementById("new-button").addEventListener("click", function() {
+      openForm();
+    });
+
+    document.getElementById("export-button").addEventListener("click", function() {
+      downloadRiddles();
+    });
+
+    document.getElementById("show-button").addEventListener("click", function() {
+      renderRiddles();
+    });
+
+    document.getElementById("import-input").addEventListener("change", function(event) {
+      var file = event.target.files[0];
+      var reader = new FileReader();
+      reader.onload = function() {
+        var data = JSON.parse(reader.result);
+        riddles = data;
+        renderRiddles();
+      };
+      reader.readAsText(file);
+    });
+
+    document.getElementById("riddle-form").addEventListener("submit", submitForm);
+    renderRiddles();
+  </script>
+
+
